@@ -20,9 +20,9 @@ public class Main extends Application {
 	@Override
     public void start(Stage stage) {
         // TODO: FILL CODE HERE
-		GameLogic logic = new GameLogic();
-		GolfCourse golfCourse = new GolfCourse();
-    	RootPane rootPane = new RootPane(golfCourse);
+//		GameLogic logic = new GameLogic();
+//		GolfCourse golfCourse = new GolfCourse();
+//    	RootPane rootPane = new RootPane(golfCourse);
     	WelcomePage welcomePage = new WelcomePage(stage);
     	Scene scene = new Scene(welcomePage, 800, 640);
     	
@@ -37,7 +37,7 @@ public class Main extends Application {
     	
     	stage.setResizable(false);
     	
-    	golfCourse.requestFocus();
+//    	golfCourse.requestFocus();
     	stage.show();
     	
 //    	AnimationTimer animation = new AnimationTimer() {

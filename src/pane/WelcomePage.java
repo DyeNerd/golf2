@@ -1,5 +1,7 @@
 package pane;
 
+import input.InputUtility;
+import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,14 +11,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import logic.GameLogic;
+import sharedObject.RenderableHolder;
 
 public class WelcomePage extends VBox {
     private Button startButton;
     private Button exitButton;
-    GameLogic logic = new GameLogic();
-	GolfCourse golfCourse = new GolfCourse();
-	RootPane rootPane = new RootPane(golfCourse);
-	Scene scene = new Scene(rootPane, 800, 640);
     
     public WelcomePage(Stage stage) {
         // Create a label to display the title of the game
@@ -35,24 +34,31 @@ public class WelcomePage extends VBox {
         startButton.setOnAction(event -> {
             // Handle the start button click event
             // (e.g. start the game)
+        	GameLogic logic = new GameLogic();
+        	GolfCourse golfCourse = new GolfCourse();
+        	RootPane rootPane = new RootPane(golfCourse);
+        	Scene scene = new Scene(rootPane, 800, 640);
         	stage.setScene(scene);
     		stage.setTitle("MiniGolf");
-        	
-//    		GameLogic logic = new GameLogic();
-//    		GolfCourse golfCourse = new GolfCourse();
-//    		root.getChildren().add(golfCourse);
         	
         	stage.setResizable(false);
         	
         	golfCourse.requestFocus();
         	stage.show();
         	
+        	AnimationTimer animation = new AnimationTimer() {
+    		public void handle(long now) {
+				golfCourse.paintComponent();
+				logic.logicUpdate();
+				RenderableHolder.getInstance().update();
+				InputUtility.updateInputState();
+    		}
+    	};
+    	animation.start();
+        	
         });
         exitButton.setOnAction(event -> {
-            // Handle the exit button click event
-            // (e.g. close the game window)
-        	Window window = scene.getWindow();
-            window.hide();
+        	
         });
         
         // Add the components to the pane

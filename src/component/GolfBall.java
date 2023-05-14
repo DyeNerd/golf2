@@ -9,7 +9,7 @@ import javafx.scene.shape.Line;
 import logic.CollidableEntity;
 
 public class GolfBall extends CollidableEntity {
-	private final int radius = 20;
+	private final int radius = 10;
 	private final double maxSpeed = 10;
 	private int powerPercent;
 	private double x, y, speed ,angle;
@@ -28,7 +28,12 @@ public class GolfBall extends CollidableEntity {
 	}
 
 	public double calculatePower() {
-		return Math.sqrt(Math.pow(x - InputUtility.mousePosX, 2) + Math.pow(y - InputUtility.mousePosY, 2));
+//		return Math.sqrt(Math.pow(x - InputUtility.mousePosX, 2) + Math.pow(y - InputUtility.mousePosY, 2));
+		double dx = x - InputUtility.mousePosX;
+		double dy = y - InputUtility.mousePosY;
+		double distance = Math.sqrt(dx * dx + dy * dy);
+		double speed = distance / 10.0; // Adjust this value as necessary
+	    return Math.min(speed, 10.0); // Limit the speed to a maximum of 10.0 units per frame
 	}
 
 	public void update() {
@@ -95,11 +100,31 @@ public class GolfBall extends CollidableEntity {
 		gc.translate(-x, -y);
 
 		if (speed == 0 && InputUtility.isDrag) {
+//			gc.setStroke(Color.RED);
+//			gc.setLineWidth(2.0);
+//			gc.strokeLine(x, y, Math.max(0, 2 * x - InputUtility.mousePosX),
+			double dx = x - InputUtility.mousePosX;
+			double dy = y - InputUtility.mousePosY;
+			double distance = Math.sqrt(dx * dx + dy * dy); // Calculate the distance between the two points
+			double arrowLength = Math.min(distance, 200); // Set arrowLength to the distance, but no more than 20.0
+			double arrowWidth = 20;
+			// Calculate the angle between the line and the x-axis
+			double angle = Math.atan2(dy, dx);
+
+			// Calculate the coordinates of the arrowhead
+			double arrowEndX = x + arrowLength * Math.cos(angle);
+			double arrowEndY = y + arrowLength * Math.sin(angle);
+			double arrowTip1X = arrowEndX + arrowWidth * Math.cos(angle + Math.toRadians(135));
+			double arrowTip1Y = arrowEndY + arrowWidth * Math.sin(angle + Math.toRadians(135));
+			double arrowTip2X = arrowEndX + arrowWidth * Math.cos(angle - Math.toRadians(135));
+			double arrowTip2Y = arrowEndY + arrowWidth * Math.sin(angle - Math.toRadians(135));
+
+			// Draw the line with an arrowhead at the end
 			gc.setStroke(Color.RED);
-			gc.setLineWidth(2.0);
-			gc.strokeLine(x, y, Math.max(0, 2 * x - InputUtility.mousePosX),
-					Math.max(0, 2 * y - InputUtility.mousePosY));
-			calculateAngle();
+			gc.setLineWidth(4.0);
+			gc.strokeLine(x, y, arrowEndX, arrowEndY);
+			gc.strokeLine(arrowEndX, arrowEndY, arrowTip1X, arrowTip1Y);
+			gc.strokeLine(arrowEndX, arrowEndY, arrowTip2X, arrowTip2Y);
 		}
 
 	}
