@@ -24,7 +24,7 @@ public class Main extends Application {
 //		GolfCourse golfCourse = new GolfCourse();
 //    	RootPane rootPane = new RootPane(golfCourse);
     	WelcomePage welcomePage = new WelcomePage(stage);
-    	Scene scene = new Scene(welcomePage, 800, 640);
+    	Scene scene = new Scene(welcomePage);
     	
 //		StackPane root = new StackPane();
 //		Scene scene = new Scene(root);
